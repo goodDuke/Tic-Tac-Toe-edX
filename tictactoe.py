@@ -92,12 +92,7 @@ def winner(board):
             if board[i][j] == player:
                 win += 1
         if win == 3:
-            return player
-
-
-        
-        
-            
+            return player      
 
 
 def terminal(board):
