@@ -22,28 +22,82 @@ def player(board):
     """
     Returns player who has the next turn on a board.
     """
-    raise NotImplementedError
+    num_x = 0
+    num_o = 0
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] == "O":
+                num_o += 1
+            elif board[i][j] == "X":
+                num_x += 1
+
+    if num_x == num_o:
+        return "X" 
+    else:
+        return "O"
+
+
 
 
 def actions(board):
     """
     Returns set of all possible actions (i, j) available on the board.
     """
-    raise NotImplementedError
+    available_actions = set()
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] == EMPTY:
+                available_actions.add((i,j))
+    return available_actions
 
 
 def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    raise NotImplementedError
+    if board[action[0]][action[1]] != EMPTY:
+        raise Exception("Invalid action.")
+
+    player = player(board)
+    new_board = board.deepcopy()
+    new_board[action[0]][action[1]] = player
 
 
 def winner(board):
     """
     Returns the winner of the game, if there is one.
     """
-    raise NotImplementedError
+    # Check diagonally
+    if board[0][0] == board[1][1] == board[2][2]:
+        return board[0][0]
+    
+    if board[2][0] == board[1][1] == board[0][2]:
+        return board[2][0]
+
+    # Check horizontally
+    for i in range(3):
+        player = board[i][i]
+        win = 0
+        for j in range(3):
+            if board[i][j] == player:
+                win += 1
+        if win == 3:
+            return player
+
+    # Check vertically
+    for j in range(3):
+        player = board[i][i]
+        win = 0
+        for i in range(3):
+            if board[i][j] == player:
+                win += 1
+        if win == 3:
+            return player
+
+
+        
+        
+            
 
 
 def terminal(board):
