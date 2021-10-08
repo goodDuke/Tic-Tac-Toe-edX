@@ -90,25 +90,46 @@ def winner(board):
             if board[i][j] == player:
                 win += 1
         if win == 3:
-            return player      
+            return player
+
+    # No winner
+    return None
 
 
 def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-    raise NotImplementedError
+    # There is a winner
+    if winner(board) is not None:
+        return True
+    
+    # Check whether the board is filled
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] == EMPTY:
+                return False
+    
+    return True
 
 
 def utility(board):
     """
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
-    raise NotImplementedError
+    if winner(board) == "X":
+        return 1
+    elif winner(board) == "O":
+        return -1
+    else:
+        return 0
 
 
 def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    raise NotImplementedError
+    if terminal(board):
+        return None
+    
+    
