@@ -33,9 +33,9 @@ def player(board):
                 num_x += 1
 
     if num_x == num_o:
-        return O 
-    else:
         return X
+    else:
+        return O
 
 
 def actions(board):
@@ -60,6 +60,7 @@ def result(board, action):
     p = player(board)
     new_board = copy.deepcopy(board)
     new_board[action[0]][action[1]] = p
+    return new_board
 
 
 def winner(board):
@@ -67,21 +68,24 @@ def winner(board):
     Returns the winner of the game, if there is one.
     """
     # Check diagonally
-    if board[0][0] == board[1][1] == board[2][2]:
+    if board[0][0] == board[1][1] and board[1][1] == board[2][2] and board[0][0] is not None:
         return board[0][0]
     
-    if board[2][0] == board[1][1] == board[0][2]:
+    if board[2][0] == board[1][1] and board[1][1] == board[0][2] and board[2][0] is not None:
         return board[2][0]
 
     # Check horizontally
     for i in range(3):
         player = board[i][i]
-        win = 0
-        for j in range(3):
-            if board[i][j] == player:
-                win += 1
-        if win == 3:
-            return player
+        if player is not None:
+            win = 0
+            for j in range(3):
+                if board[i][j] == player:
+                    win += 1
+            if win == 3:
+                return player
+    
+    return None
 
     # Check vertically
     for j in range(3):
@@ -145,6 +149,7 @@ def minimax(board):
         new_board = result(board, a)
 
         m_a = minimax(new_board)
+        print(m_a)
 
         if m_a is not None:
             new_board = result(new_board, m_a)
