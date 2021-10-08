@@ -163,4 +163,3 @@ def minimax(board):
             best_action = a 
 
     return best_action
-
