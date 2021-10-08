@@ -3,6 +3,7 @@ Tic Tac Toe Player
 """
 
 import math
+import copy
 
 X = "X"
 O = "O"
@@ -26,15 +27,15 @@ def player(board):
     num_o = 0
     for i in range(3):
         for j in range(3):
-            if board[i][j] == "O":
+            if board[i][j] == O:
                 num_o += 1
-            elif board[i][j] == "X":
+            elif board[i][j] == X:
                 num_x += 1
 
     if num_x == num_o:
-        return "X" 
+        return O 
     else:
-        return "O"
+        return X
 
 
 def actions(board):
@@ -56,9 +57,9 @@ def result(board, action):
     if board[action[0]][action[1]] != EMPTY:
         raise Exception("Invalid action.")
 
-    player = player(board)
-    new_board = board.deepcopy()
-    new_board[action[0]][action[1]] = player
+    p = player(board)
+    new_board = copy.deepcopy(board)
+    new_board[action[0]][action[1]] = p
 
 
 def winner(board):
@@ -117,9 +118,9 @@ def utility(board):
     """
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
-    if winner(board) == "X":
+    if winner(board) == X:
         return 1
-    elif winner(board) == "O":
+    elif winner(board) == O:
         return -1
     else:
         return 0
@@ -131,5 +132,30 @@ def minimax(board):
     """
     if terminal(board):
         return None
-    
-    
+
+    available_actions = actions(board)
+
+    p = player(board)
+    if p == O:
+        best_result = 2
+    else:
+        best_result = -2
+
+    for a in available_actions:
+        new_board = result(board, a)
+
+        m_a = minimax(new_board)
+
+        if m_a is not None:
+            new_board = result(new_board, m_a)
+
+        r = utility(new_board)
+        if p == O and r < best_result:
+            best_result = r
+            best_action = a
+        elif p == X and r > best_result:
+            best_result = r
+            best_action = a 
+
+    return best_action
+
