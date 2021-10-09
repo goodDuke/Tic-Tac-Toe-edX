@@ -84,18 +84,17 @@ def winner(board):
                     win += 1
             if win == 3:
                 return player
-    
-    return None
 
     # Check vertically
     for j in range(3):
-        player = board[i][i]
-        win = 0
-        for i in range(3):
-            if board[i][j] == player:
-                win += 1
-        if win == 3:
-            return player
+        player = board[j][j]
+        if player is not None:
+            win = 0
+            for i in range(3):
+                if board[i][j] == player:
+                    win += 1
+            if win == 3:
+                return player
 
     # No winner
     return None
@@ -147,9 +146,7 @@ def minimax(board):
 
     for a in available_actions:
         new_board = result(board, a)
-
         m_a = minimax(new_board)
-        print(m_a)
 
         if m_a is not None:
             new_board = result(new_board, m_a)
