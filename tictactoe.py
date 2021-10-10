@@ -135,12 +135,34 @@ def minimax(board):
     """
     if terminal(board):
         return None
-    
-    # Computer takes too much time to calculate first action if the board is empty
+
+    # Computer takes to much time to calculate next action if the board is empty
     if board == initial_state():
         return (0,1)
 
-    available_actions = actions(board)
+    p = player(board)
+    if p == O:
+        best_result = 2
+    else:
+        best_result = -2
+
+    for a in actions(board):
+        new_board = result(board, a)
+        new_result = minimax_result(new_board)
+
+        if p == O and new_result < best_result:
+            best_result = new_result
+            best_action = a
+        elif p == X and new_result > best_result:
+            best_result = new_result
+            best_action = a 
+
+    return best_action
+
+
+def minimax_result(board):
+    if terminal(board):
+        return utility(board)
 
     p = player(board)
     if p == O:
@@ -148,41 +170,13 @@ def minimax(board):
     else:
         best_result = -100
 
-    for a in available_actions:
+    for a in actions(board):
         new_board = result(board, a)
-        r = minimax_depth(new_board, 0)
+        new_result = minimax_result(new_board)
 
-        if p == O and r < best_result:
-            best_result = r
-            best_action = a
-        elif p == X and r > best_result:
-            best_result = r
-            best_action = a 
+        if p == O and new_result < best_result:
+            best_result = new_result
+        elif p == X and new_result > best_result:
+            best_result = new_result
 
-    return best_action
-
-
-def minimax_depth(board, depth):
-    if terminal(board):
-        return utility(board)
-    
-    depth += 1
-    p = player(board)
-    available_actions = actions(board)
-    if p == O:
-        current_result = 100
-    else:
-        current_result = -100
-
-    for a in available_actions:
-        new_board = result(board, a)
-        new_result = minimax_depth(new_board, depth)
-
-        if p == O and new_result + depth < current_result:
-            best_result = new_result + depth 
-            best_action = a
-        elif p == X and new_result - depth > current_result:
-            best_result = new_result - depth
-            best_action = a
-    
     return best_result
