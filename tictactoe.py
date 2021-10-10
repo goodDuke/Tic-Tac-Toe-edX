@@ -135,23 +135,23 @@ def minimax(board):
     """
     if terminal(board):
         return None
+    
+    # Computer takes too much time to calculate first action if the board is empty
+    if board == initial_state():
+        return (0,1)
 
     available_actions = actions(board)
 
     p = player(board)
     if p == O:
-        best_result = 2
+        best_result = 100
     else:
-        best_result = -2
+        best_result = -100
 
     for a in available_actions:
         new_board = result(board, a)
-        m_a = minimax(new_board)
+        r = minimax_depth(new_board, 0)
 
-        if m_a is not None:
-            new_board = result(new_board, m_a)
-
-        r = utility(new_board)
         if p == O and r < best_result:
             best_result = r
             best_action = a
@@ -160,3 +160,29 @@ def minimax(board):
             best_action = a 
 
     return best_action
+
+
+def minimax_depth(board, depth):
+    if terminal(board):
+        return utility(board)
+    
+    depth += 1
+    p = player(board)
+    available_actions = actions(board)
+    if p == O:
+        current_result = 100
+    else:
+        current_result = -100
+
+    for a in available_actions:
+        new_board = result(board, a)
+        new_result = minimax_depth(new_board, depth)
+
+        if p == O and new_result + depth < current_result:
+            best_result = new_result + depth 
+            best_action = a
+        elif p == X and new_result - depth > current_result:
+            best_result = new_result - depth
+            best_action = a
+    
+    return best_result
