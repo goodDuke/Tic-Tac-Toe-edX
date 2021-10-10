@@ -166,9 +166,9 @@ def minimax_result(board):
 
     p = player(board)
     if p == O:
-        best_result = 100
+        best_result = 2
     else:
-        best_result = -100
+        best_result = -2
 
     for a in actions(board):
         new_board = result(board, a)
